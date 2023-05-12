@@ -5,5 +5,6 @@ dosyası bulunuyor.Diğerleri resim dosyaları.  En iyi deneyim için kodları s
   ....
 # #%% Bu başka bir section
   ....
+  
 Sectionlardan dolayı gerekli kütüphaneler defalarca import edilmiştir.Scriptte sadece opencv değil , matplotlib , pandas gibi veri bilimi ve yapay zeka alanında çalışma yaparken işlerimizi kolaylaştıran 
 kütüphanelerde kullanılıyor.
