@@ -96,7 +96,7 @@ cv2.imshow("circle",img)
 
 #Yazı Yazdırma
 
-cv2.putText(img,"Resim\n Nabeerrrrr",(0,0),cv2.FONT_HERSHEY_COMPLEX,1, (255,255,255))
+cv2.putText(img,"Resim",(0,0),cv2.FONT_HERSHEY_COMPLEX,1, (255,255,255))
 
 cv2.imshow("Yazili" , img)
 
@@ -387,6 +387,90 @@ img = cv2.imread("red_blue.jpg")
 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 plt.figure(), plt.imshow(img), plt.axis("off"),plt.title("Original"),plt.show()
 
+imageHistogram = cv2.calcHist([img],channels = [0] , mask = None, histSize = [256] ,ranges = [0,256])
+print(imageHistogram.shape)
+plt.figure(),plt.plot(imageHistogram)
 
+color = ("b", "g" , "r")
+for i , c in enumerate(color) :
+    imageHistogram = cv2.calcHist([img],channels = [i] , mask = None, histSize = [256] ,ranges = [0,256])
+    plt.figure(),plt.plot(imageHistogram , color = c)
+
+
+#Maske oluşturalım 
+
+golden_gate_img = cv2.imread("goldenGate.jpg")
+golden_gate_img = cv2.cvtColor(golden_gate_img,cv2.COLOR_BGR2RGB)
+
+mask = np.zeros(shape=golden_gate_img.shape, dtype = np.uint8)
+plt.figure(), plt.imshow(mask ,cmap ="gray")
+
+#Maskede bir beyaz alan yaratalım (koordinatları rastgele vericem)
+
+mask[500 : 1500 , 500 : 1500] = 255
+
+plt.figure(), plt.imshow(mask , cmap = "gray")
+
+# Maskeyi resime uygula
+
+maskedImg = cv2.bitwise_and(golden_gate_img , golden_gate_img , mask = mask)
+plt.figure(), plt.imshow(maskedImg , cmap = "gray")
+
+
+#%% HİSTOGRAM EŞİTLEME YANİ KONTRAST ARTTIRMA
+
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
+
+img = cv2.imread("hist_equ.jpg",0)
+plt.figure(), plt.imshow(img, cmap="gray"), plt.axis("off"),plt.title("Original"),plt.show()
+
+#Resmin tek bir channel da yani 0 channelinda histogramını oluşturalım bunun sonraki işlemle alakası yok sadece görmek için yapıyoruz
+img_hist = cv2.calcHist([img], channels = [0], mask = None, histSize = [256], ranges = [0,256])
+plt.figure() , plt.plot(img_hist)
+
+
+eq_hist = cv2.equalizeHist(img)
+plt.figure(), plt.imshow(eq_hist, cmap="gray"), plt.axis("off"),plt.show()
+
+#%% Genel Tekrar
+import matplotlib.pyplot as plt
+import numpy as np
+import cv2
+
+
+img = cv2.imread("sudoku.jpg")
+cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+width , height = img.shape[0:2]
+print(width , height)
+newImg = cv2.resize(img,dsize = (height,int(width * 0.8)))
+
+cv2.putText(newImg,"Bu yazıyı opencv ekledi",(100,100),fontFace = cv2.FONT_HERSHEY_COMPLEX,fontScale = 0.8 , color = 2)
+print(newImg.shape)
+plt.figure(), plt.imshow(newImg)
+
+
+_ , threshedImg = cv2.threshold(img,thresh = 50,maxval = 255,type = cv2.THRESH_BINARY)
+
+plt.figure(), plt.imshow(threshedImg)
+
+_ , threshedImg = cv2.threshold(img,thresh = 60,maxval = 255,type = cv2.THRESH_BINARY)
+
+plt.figure(), plt.imshow(threshedImg)
+
+_ , threshedImg = cv2.threshold(img,thresh = 150,maxval = 255,type = cv2.THRESH_BINARY)
+
+plt.figure(), plt.imshow(threshedImg)
+
+gaussian_blur = cv2.GaussianBlur(img, (3,3), 0.6)
+plt.figure(), plt.imshow(gaussian_blur)
+
+gaussian_blur = cv2.GaussianBlur(img, (3,3), 1)
+plt.figure(), plt.imshow(gaussian_blur)
+
+
+laplacian = cv2.Laplacian(img,ddepth = cv2.CV_16S)
+plt.figure(), plt.imshow(laplacian)
 
 
